@@ -18,4 +18,29 @@ router.get('/history', verifyPermission, async (req, res) => {
   }
 });
 
+router.post('/history', verifyPermission, async (req, res) => {
+  const { userId, body } = req;
+
+  const user = await User.findById(userId);
+
+  if (!body.newHistory) {
+    res.status(400).send({ message: 'Must contain a history array' });
+  } else {
+    user.history = body.newHistory;
+
+    try {
+      const savedUser = await user.save();
+
+      res.status(200).send({
+        message: 'History successfully updated',
+        history: savedUser.history
+      });
+    } catch (err) {
+      res
+        .status(500)
+        .send({ message: 'There has been an error saving new history' });
+    }
+  }
+});
+
 module.exports = router;
