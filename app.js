@@ -1,12 +1,15 @@
 const express = require('express'),
   app = express(),
-  mongoose = require('mongoose');
+  mongoose = require('mongoose'),
+  authRouter = require('./routes/auth');
 
 require('dotenv').config();
 
 // Connect to DB
-mongoose.connect(process.env.DB_CONNECT, { useNewUrlParser: true }, () =>
-  console.log('Server has successfully connected to database')
+mongoose.connect(
+  process.env.DB_CONNECT,
+  { useUnifiedTopology: true, useNewUrlParser: true },
+  () => console.log('Server has successfully connected to database')
 );
 
 // Middlewares
@@ -16,6 +19,8 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/', (req, res) => {
   res.send('Api rodando');
 });
+
+app.use('/api/auth', authRouter);
 
 const port = process.env.PORT || 5000;
 
