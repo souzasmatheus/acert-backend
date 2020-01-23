@@ -1,6 +1,7 @@
 const express = require('express'),
   app = express(),
   mongoose = require('mongoose'),
+  cors = require('cors'),
   authRouter = require('./routes/auth'),
   historyRouter = require('./routes/history');
 
@@ -16,6 +17,7 @@ mongoose.connect(
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 app.get('/', (req, res) => {
   res.send('Api rodando');
